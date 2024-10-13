@@ -1,14 +1,11 @@
-class GameEditor extends HTMLElement {
+import { BaseComponent } from './base-component.js';
+
+class GameEditor extends BaseComponent {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
         this.components = [];
         this.selectedComponent = null;
-    }
-
-    connectedCallback() {
-        this.render();
-        this.setupEventListeners();
     }
 
     render() {
@@ -31,12 +28,16 @@ class GameEditor extends HTMLElement {
         `;
     }
 
-    setupEventListeners() {
+    addEventListeners() {
         this.shadowRoot.addEventListener('component-selected', this.handleComponentSelected.bind(this));
         this.shadowRoot.addEventListener('component-placed', this.handleComponentPlaced.bind(this));
         this.shadowRoot.addEventListener('component-delete', this.handleComponentDelete.bind(this));
         this.shadowRoot.addEventListener('component-updated', this.handleComponentUpdated.bind(this));
         this.shadowRoot.addEventListener('inspect-component', this.handleInspectComponent.bind(this));
+
+        const toolBar = this.shadowRoot.querySelector('tool-bar');
+        toolBar.addEventListener('save', this.handleSaveButtonClick.bind(this));
+        toolBar.addEventListener('load', this.handleLoadButtonClick.bind(this));
     }
 
     handleComponentSelected(event) {
@@ -77,6 +78,33 @@ class GameEditor extends HTMLElement {
     updateGrid() {
         const grid = this.shadowRoot.querySelector('game-grid');
         grid.setComponents(this.components);
+    }
+
+    handleSaveButtonClick() {
+        const gameState = JSON.stringify(this.components);
+        const blob = new Blob([gameState], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'game-state.json';
+        link.click();
+    }
+
+    handleLoadButtonClick() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.onchange = (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const gameState = JSON.parse(e.target.result);
+                this.components = gameState;
+                this.updateGrid();
+            };
+            reader.readAsText(file);
+        };
+        input.click();
     }
 }
 

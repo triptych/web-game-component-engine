@@ -15,6 +15,7 @@ The 2D Web Game Component Editor is a web application that allows users to build
 7. Responsive Design: The application is designed to work on different screen sizes.
 8. Toolbar: Provides options to save, load, and reset the game state.
 9. Game Components: A set of pre-built game components (Player, Enemy, Platform, Coin, Button) that can be used to create games.
+10. Save and Load Functionality: Users can save their current game state to a JSON file and load it later, allowing for easy project management and sharing.
 
 ## Project Structure
 
@@ -24,7 +25,7 @@ The project is organized as follows:
 - `main.js`: The entry point of the JavaScript application, handling component imports and main event listeners.
 - `styles.css`: Contains the global styles for the application.
 - `components/`: A directory containing all the web components used in the application.
-  - `game-editor.js`: The main container component for the entire application.
+  - `game-editor.js`: The main container component for the entire application, managing the overall state and interactions between other components.
   - `component-list.js`: Manages the left column display of available game components.
   - `component-item.js`: Represents individual draggable components in the list.
   - `game-grid.js`: Handles the central grid area where components are placed.
@@ -68,6 +69,8 @@ To run the project locally:
 5. Use the inspector to modify component properties.
 6. Use the zoom and pan controls to navigate the game grid, including smooth panning for precise navigation.
 7. Delete components using the delete button in the inspector.
+8. Save your current game state using the save button in the toolbar. This will download a JSON file containing your game state.
+9. Load a previously saved game state using the load button in the toolbar. This will allow you to upload a JSON file and restore your game layout.
 
 ## Game Components
 
