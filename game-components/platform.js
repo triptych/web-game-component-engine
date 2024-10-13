@@ -1,4 +1,4 @@
-class Platform extends HTMLElement {
+export class Platform extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });

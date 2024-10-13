@@ -1,4 +1,4 @@
-class Player extends HTMLElement {
+export class Player extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });

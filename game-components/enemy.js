@@ -1,4 +1,4 @@
-class Enemy extends HTMLElement {
+export class Enemy extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });

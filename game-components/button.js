@@ -1,4 +1,4 @@
-class GameButton extends HTMLElement {
+export class Button extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
@@ -46,4 +46,4 @@ class GameButton extends HTMLElement {
     }
 }
 
-customElements.define('game-button', GameButton);
+customElements.define('game-button', Button);
