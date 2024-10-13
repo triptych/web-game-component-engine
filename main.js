@@ -44,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
     gameGrid.addEventListener('click', (e) => {
         const cell = e.target.closest('grid-cell');
         if (cell) {
-            componentInspector.updateInspector(cell);
+            const component = cell.getComponent();
+            componentInspector.setComponent(component);
         }
     });
 

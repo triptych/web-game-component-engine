@@ -10,7 +10,7 @@ The 2D Web Game Component Editor is a web application that allows users to build
 2. Game Grid: A central area where users can place and manipulate game components.
 3. Component Inspector: A panel for viewing and editing properties of selected components.
 4. Drag-and-Drop Functionality: Users can drag components from the list to the grid.
-5. Zoom and Pan Controls: For navigating larger game layouts.
+5. Zoom and Pan Controls: For navigating larger game layouts, including smooth panning functionality.
 6. Component Selection and Deletion: Users can select components on the grid and delete them.
 7. Responsive Design: The application is designed to work on different screen sizes.
 8. Toolbar: Provides options to save, load, and reset the game state.
@@ -32,7 +32,7 @@ The project is organized as follows:
   - `component-inspector.js`: Manages the right column for inspecting and editing selected components.
   - `inspector-field.js`: Reusable component for editable fields in the inspector.
   - `zoom-control.js`: Provides zoom functionality for the game grid.
-  - `pan-control.js`: Enables panning of the game grid.
+  - `pan-control.js`: Enables smooth panning of the game grid.
   - `delete-button.js`: A reusable delete button component.
   - `tool-bar.js`: Manages the toolbar with save, load, and reset functionality.
 - `game-components/`: A directory containing the implemented game components.
@@ -66,7 +66,7 @@ To run the project locally:
 3. Drag components from the list onto the game grid in the center.
 4. Click on placed components to select them and view their properties in the inspector on the right.
 5. Use the inspector to modify component properties.
-6. Use the zoom and pan controls to navigate the game grid.
+6. Use the zoom and pan controls to navigate the game grid, including smooth panning for precise navigation.
 7. Delete components using the delete button in the inspector.
 
 ## Game Components
@@ -77,7 +77,7 @@ The editor includes the following pre-built game components:
 2. Enemy: A red triangular component representing enemy characters.
 3. Platform: A green rectangular component representing platforms or terrain.
 4. Coin: A gold circular component representing collectible items.
-5. Button: A customizable button component for UI elements.
+5. Button: A customizable button component for UI elements or interactive game objects.
 
 These components can be easily added to the game grid and customized using the component inspector.
 

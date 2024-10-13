@@ -4,7 +4,7 @@ import { Platform } from '../game-components/platform.js';
 import { Coin } from '../game-components/coin.js';
 import { Button } from '../game-components/button.js';
 
-class GridCell extends HTMLElement {
+export class GridCell extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
@@ -30,6 +30,7 @@ class GridCell extends HTMLElement {
             </style>
             <div class="component-container"></div>
         `;
+        this.currentComponent = null;
         console.log('GridCell constructed');
     }
 
@@ -72,8 +73,38 @@ class GridCell extends HTMLElement {
 
         if (componentElement) {
             container.appendChild(componentElement);
+            this.currentComponent = componentElement;
             console.log(`GridCell: Component ${componentName} added to container`);
         }
+    }
+
+    getComponent() {
+        return this.currentComponent;
+    }
+
+    updateComponent(updatedComponent) {
+        console.log('GridCell: Updating component', updatedComponent);
+        if (this.currentComponent && this.currentComponent.constructor.name === updatedComponent.constructor.name) {
+            // Update properties of the current component
+            Object.assign(this.currentComponent, updatedComponent);
+
+            // If the component has an update method, call it
+            if (typeof this.currentComponent.update === 'function') {
+                this.currentComponent.update();
+            }
+
+            console.log('GridCell: Component updated successfully');
+        } else {
+            console.error('GridCell: Cannot update component. Types do not match or no component exists.');
+        }
+    }
+
+    clearComponent() {
+        console.log('GridCell: Clearing component');
+        const container = this.shadowRoot.querySelector('.component-container');
+        container.innerHTML = ''; // Clear the container
+        this.currentComponent = null;
+        console.log('GridCell: Component cleared successfully');
     }
 }
 

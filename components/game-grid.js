@@ -1,13 +1,18 @@
+import { GridCell } from './grid-cell.js';
+
 class GameGrid extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
         this.gridSize = 10;
+        this.cells = [];
+        this.components = [];
         console.log('GameGrid constructed');
     }
 
     connectedCallback() {
         this.render();
+        this.addComponentUpdateListener();
         console.log('GameGrid connected to DOM');
     }
 
@@ -25,13 +30,33 @@ class GameGrid extends HTMLElement {
             </style>
         `;
 
+        this.cells = [];
         for (let i = 0; i < this.gridSize * this.gridSize; i++) {
-            const cell = document.createElement('grid-cell');
+            const cell = new GridCell();
+            cell.addEventListener('click', (e) => this.handleCellClick(e, i));
             this.shadowRoot.appendChild(cell);
+            this.cells.push(cell);
         }
 
+        this.renderComponents();
         this.addDropListener();
         console.log('GameGrid rendered');
+    }
+
+    renderComponents() {
+        this.cells.forEach(cell => cell.clearComponent());
+        this.components.forEach(component => {
+            const cellIndex = component.y * this.gridSize + component.x;
+            if (cellIndex >= 0 && cellIndex < this.cells.length) {
+                this.cells[cellIndex].setComponent(component.type);
+            }
+        });
+    }
+
+    setComponents(components) {
+        this.components = components;
+        this.renderComponents();
+        console.log('GameGrid: Components updated', this.components);
     }
 
     addDropListener() {
@@ -56,17 +81,64 @@ class GameGrid extends HTMLElement {
             const row = Math.floor(y / cellHeight);
 
             const cellIndex = row * this.gridSize + col;
-            const cell = this.shadowRoot.querySelectorAll('grid-cell')[cellIndex];
+            const cell = this.cells[cellIndex];
 
             if (cell) {
                 console.log(`GameGrid: Setting component ${componentName} to cell at (${col}, ${row})`);
+                const newComponent = { type: componentName, x: col, y: row };
+                this.components.push(newComponent);
                 cell.setComponent(componentName);
+                this.updateComponentInspector(cellIndex);
+                this.dispatchEvent(new CustomEvent('component-placed', {
+                    bubbles: true,
+                    composed: true,
+                    detail: { component: newComponent }
+                }));
             } else {
                 console.log(`GameGrid: No valid cell found for drop at (${col}, ${row})`);
             }
         });
 
         console.log('GameGrid: Drop listeners added');
+    }
+
+    handleCellClick(e, index) {
+        console.log(`GameGrid: Cell clicked at index ${index}`);
+        this.updateComponentInspector(index);
+    }
+
+    updateComponentInspector(cellIndex) {
+        const component = this.components.find(c => c.y * this.gridSize + c.x === cellIndex);
+        this.dispatchEvent(new CustomEvent('inspect-component', {
+            bubbles: true,
+            composed: true,
+            detail: { component }
+        }));
+    }
+
+    addComponentUpdateListener() {
+        this.addEventListener('component-updated', (event) => {
+            const updatedComponent = event.detail.component;
+            console.log('GameGrid: Component updated event received', updatedComponent);
+
+            const index = this.components.findIndex(c => c.x === updatedComponent.x && c.y === updatedComponent.y);
+            if (index !== -1) {
+                this.components[index] = updatedComponent;
+                this.renderComponents();
+            } else {
+                console.log('GameGrid: Could not find component to update');
+            }
+        });
+
+        this.addEventListener('component-delete', (event) => {
+            const deletedComponent = event.detail.component;
+            console.log('GameGrid: Component delete event received', deletedComponent);
+
+            this.components = this.components.filter(c => c !== deletedComponent);
+            this.renderComponents();
+        });
+
+        console.log('GameGrid: Component update and delete listeners added');
     }
 }
 
