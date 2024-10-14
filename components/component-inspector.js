@@ -1,13 +1,10 @@
-class ComponentInspector extends HTMLElement {
+import { BaseComponent } from './base-component.js';
+
+class ComponentInspector extends BaseComponent {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
         console.log('ComponentInspector: Constructor called');
-    }
-
-    connectedCallback() {
-        console.log('ComponentInspector: Connected to DOM');
-        this.render();
     }
 
     render() {

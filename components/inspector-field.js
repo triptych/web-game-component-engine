@@ -1,12 +1,9 @@
-class InspectorField extends HTMLElement {
+import { BaseComponent } from './base-component.js';
+
+class InspectorField extends BaseComponent {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-    }
-
-    connectedCallback() {
-        this.render();
-        this.addInputListener();
     }
 
     render() {
@@ -28,6 +25,10 @@ class InspectorField extends HTMLElement {
             <label>${name}</label>
             <input type="${type}" value="${value}">
         `;
+    }
+
+    addEventListeners() {
+        this.addInputListener();
     }
 
     getInputType(name, value) {

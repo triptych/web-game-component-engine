@@ -1,11 +1,9 @@
-class ZoomControl extends HTMLElement {
+import { BaseComponent } from './base-component.js';
+
+class ZoomControl extends BaseComponent {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-    }
-
-    connectedCallback() {
-        this.render();
     }
 
     render() {
@@ -26,8 +24,6 @@ class ZoomControl extends HTMLElement {
             <span id="zoom-level">100%</span>
             <button id="zoom-in">+</button>
         `;
-
-        this.addEventListeners();
     }
 
     addEventListeners() {

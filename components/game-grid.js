@@ -1,6 +1,7 @@
+import { BaseComponent } from './base-component.js';
 import { GridCell } from './grid-cell.js';
 
-class GameGrid extends HTMLElement {
+class GameGrid extends BaseComponent {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
@@ -11,7 +12,7 @@ class GameGrid extends HTMLElement {
     }
 
     connectedCallback() {
-        this.render();
+        super.connectedCallback();
         this.addComponentUpdateListener();
         console.log('GameGrid connected to DOM');
     }
@@ -39,18 +40,40 @@ class GameGrid extends HTMLElement {
         }
 
         this.renderComponents();
-        this.addDropListener();
         console.log('GameGrid rendered');
     }
 
+    addEventListeners() {
+        this.addDropListener();
+    }
+
     renderComponents() {
-        this.cells.forEach(cell => cell.clearComponent());
+        console.log('GameGrid: renderComponents called with components:', this.components);
+
+        // Clear only cells that don't have components
+        this.cells.forEach((cell, index) => {
+            const hasComponent = this.components.some(comp => comp.y * this.gridSize + comp.x === index);
+            if (!hasComponent) {
+                cell.clearComponent();
+            }
+        });
+
+        // Render components
         this.components.forEach(component => {
             const cellIndex = component.y * this.gridSize + component.x;
             if (cellIndex >= 0 && cellIndex < this.cells.length) {
+                console.log(`GameGrid: Rendering component ${component.type} at cell index ${cellIndex}`);
                 this.cells[cellIndex].setComponent(component.type);
             }
         });
+
+        console.log('GameGrid: Components rendered');
+    }
+
+    rerenderComponents() {
+        console.log('GameGrid: Rerendering all components');
+        this.cells.forEach(cell => cell.clearComponent());
+        this.renderComponents();
     }
 
     setComponents(components) {
@@ -87,7 +110,15 @@ class GameGrid extends HTMLElement {
                 console.log(`GameGrid: Setting component ${componentName} to cell at (${col}, ${row})`);
                 const newComponent = { type: componentName, x: col, y: row };
                 this.components.push(newComponent);
+
+                // Immediately set the component on the cell
                 cell.setComponent(componentName);
+                console.log(`GameGrid: Component ${componentName} set on cell`);
+
+                // Render components immediately
+                this.renderComponents();
+                console.log('GameGrid: Render completed after drop');
+
                 this.updateComponentInspector(cellIndex);
                 this.dispatchEvent(new CustomEvent('component-placed', {
                     bubbles: true,
@@ -139,6 +170,21 @@ class GameGrid extends HTMLElement {
         });
 
         console.log('GameGrid: Component update and delete listeners added');
+    }
+
+    updateComponent(updatedComponent) {
+        const index = this.components.findIndex(c => c.x === updatedComponent.x && c.y === updatedComponent.y);
+        if (index !== -1) {
+            this.components[index] = updatedComponent;
+            this.renderComponents();
+        } else {
+            console.log('GameGrid: Could not find component to update');
+        }
+    }
+
+    deleteComponent(deletedComponent) {
+        this.components = this.components.filter(c => c !== deletedComponent);
+        this.renderComponents();
     }
 }
 

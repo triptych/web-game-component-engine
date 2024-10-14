@@ -1,13 +1,19 @@
+import { BaseComponent } from './base-component.js';
 import { Player } from '../game-components/player.js';
 import { Enemy } from '../game-components/enemy.js';
 import { Platform } from '../game-components/platform.js';
 import { Coin } from '../game-components/coin.js';
 import { Button } from '../game-components/button.js';
 
-export class GridCell extends HTMLElement {
+export class GridCell extends BaseComponent {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
+        this.currentComponent = null;
+        console.log('GridCell constructed');
+    }
+
+    render() {
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
@@ -30,17 +36,6 @@ export class GridCell extends HTMLElement {
             </style>
             <div class="component-container"></div>
         `;
-        this.currentComponent = null;
-        console.log('GridCell constructed');
-    }
-
-    connectedCallback() {
-        this.render();
-        console.log('GridCell connected to DOM');
-    }
-
-    render() {
-        // The initial render is now handled in the constructor
         console.log('GridCell rendered');
     }
 

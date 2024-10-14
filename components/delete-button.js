@@ -1,11 +1,9 @@
-class DeleteButton extends HTMLElement {
+import { BaseComponent } from './base-component.js';
+
+class DeleteButton extends BaseComponent {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-    }
-
-    connectedCallback() {
-        this.render();
     }
 
     render() {
@@ -24,7 +22,9 @@ class DeleteButton extends HTMLElement {
             </style>
             <button>Delete Component</button>
         `;
+    }
 
+    addEventListeners() {
         this.shadowRoot.querySelector('button').addEventListener('click', () => {
             this.dispatchEvent(new CustomEvent('delete', { bubbles: true, composed: true }));
         });

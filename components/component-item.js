@@ -1,11 +1,9 @@
-class ComponentItem extends HTMLElement {
+import { BaseComponent } from './base-component.js';
+
+class ComponentItem extends BaseComponent {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-    }
-
-    connectedCallback() {
-        this.render();
     }
 
     render() {
@@ -35,7 +33,9 @@ class ComponentItem extends HTMLElement {
                 <small>${category}</small>
             </div>
         `;
+    }
 
+    addEventListeners() {
         this.addDragListeners();
     }
 

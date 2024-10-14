@@ -1,11 +1,9 @@
-class PanControl extends HTMLElement {
+import { BaseComponent } from './base-component.js';
+
+class PanControl extends BaseComponent {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-    }
-
-    connectedCallback() {
-        this.render();
     }
 
     render() {
@@ -26,8 +24,6 @@ class PanControl extends HTMLElement {
             <button id="pan-right">→</button>
             <button id="pan-down">↓</button>
         `;
-
-        this.addEventListeners();
     }
 
     addEventListeners() {

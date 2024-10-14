@@ -1,11 +1,9 @@
-class ComponentList extends HTMLElement {
+import { BaseComponent } from './base-component.js';
+
+class ComponentList extends BaseComponent {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-    }
-
-    connectedCallback() {
-        this.render();
     }
 
     render() {
