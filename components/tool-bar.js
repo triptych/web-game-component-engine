@@ -35,6 +35,8 @@ export class ToolBar extends BaseComponent {
             <div>
                 <button id="save-btn">Save</button>
                 <button id="load-btn">Load</button>
+                <button id="export-btn">Export</button>
+                <button id="import-btn">Import</button>
                 <button id="reset-btn">Reset</button>
                 <button id="rerender-btn">Rerender Grid</button>
             </div>
@@ -50,6 +52,14 @@ export class ToolBar extends BaseComponent {
 
         this.shadowRoot.getElementById('load-btn').addEventListener('click', () => {
             this.dispatchEvent(new CustomEvent('load', { bubbles: true, composed: true }));
+        });
+
+        this.shadowRoot.getElementById('export-btn').addEventListener('click', () => {
+            this.dispatchEvent(new CustomEvent('export', { bubbles: true, composed: true }));
+        });
+
+        this.shadowRoot.getElementById('import-btn').addEventListener('click', () => {
+            this.dispatchEvent(new CustomEvent('import', { bubbles: true, composed: true }));
         });
 
         this.shadowRoot.getElementById('reset-btn').addEventListener('click', () => {
